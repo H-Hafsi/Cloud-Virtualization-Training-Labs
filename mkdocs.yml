@@ -13,8 +13,8 @@ theme:
   name: material
   custom_dir: overrides
   language: fr
-  logo: assets/img/logo-iset.svg
-  favicon: assets/img/logo-iset.svg
+  logo: assets/img/cloud.png
+  favicon: assets/img/cloud.png
   font:
     text: Source Sans 3
     code: JetBrains Mono

@@ -29,7 +29,7 @@
     Le cours prévoit trois profils. Chaque fiche de lab indique le profil requis et les ressources minimales de ses machines virtuelles.
 
     - **Profil A** : poste de 16 Go de RAM. Il couvre la majorité des labs (Parties 1 et 2, KVM, Infrastructure as Code, LocalStack, supervision).
-    - **Profil B** : poste de 16 Go de RAM dont **8 Go** peuvent être dédiés à une seule machine virtuelle (Proxmox VE, ESXi). Les autres applications doivent être fermées pendant le lab.
+    - **Profil B** : poste de 16 Go de RAM dont **9 Go** peuvent être dédiés à une ou deux machines virtuelles (un nœud Proxmox VE de 8 Go ; ESXi avec une petite machine de stockage). Les autres applications doivent être fermées pendant le lab.
     - **Profil C** : poste de **32 Go** de RAM, ou machine de salle. Il est requis pour les grappes à plusieurs nœuds, vCenter, Ceph et DevStack. Si vous n'y avez pas accès, le lab est réalisé en démonstration ou sur une machine partagée (voir la section 9).
 
     !!! info "Mémoire réservée à l'hôte"
@@ -40,7 +40,7 @@
     The course defines three profiles. Each lab sheet states the profile it requires and the minimum resources of its virtual machines.
 
     - **Profile A**: a 16 GB RAM computer. It covers most labs (Parts 1 and 2, KVM, Infrastructure as Code, LocalStack, monitoring).
-    - **Profile B**: a 16 GB RAM computer where **8 GB** can be dedicated to a single virtual machine (Proxmox VE, ESXi). Close other applications during the lab.
+    - **Profile B**: a 16 GB RAM computer where **9 GB** can be dedicated to one or two virtual machines (one 8 GB Proxmox VE node; ESXi with a small storage machine). Close other applications during the lab.
     - **Profile C**: a **32 GB** RAM computer, or a classroom machine. It is required for multi-node clusters, vCenter, Ceph and DevStack. If you cannot access one, the lab is done as a demonstration or on a shared machine (see section 9).
 
     !!! info "Memory reserved for the host"
@@ -49,7 +49,7 @@
 | Profil / Profile | RAM hôte / Host RAM | vCPU (cœurs) / Cores | Disque libre / Free disk | Usage principal / Main use |
 |---|---|---|---|---|
 | **A** | 16 Go / GB | 4 minimum | 100 Go / GB | Parties 1 et 2, KVM, IaC, LocalStack, supervision |
-| **B** | 16 Go / GB (8 Go / GB pour une VM) | 4 minimum | 100 Go / GB | Proxmox VE (un nœud), ESXi |
+| **B** | 16 Go / GB (9 Go / GB pour 1 à 2 VM) | 4 minimum | 100 Go / GB | Proxmox VE (un nœud), ESXi |
 | **C** | 32 Go / GB | 6 recommandés / recommended | 200 Go / GB (estimation / estimate) | Cluster Proxmox, vCenter, Ceph, DevStack |
 
 ### Budget de mémoire par groupe de labs / Memory budget per lab group
@@ -64,14 +64,16 @@
 | 11.2 (Ceph) | 3 | 12 Go / GB | C |
 | 12.1 à 12.3 (KVM) | 1 hôte KVM + invités légers / light guests | 4 Go / GB | A |
 | 13.1 à 13.3, 17.2 (Proxmox VE, un nœud / single node) | 1 | 8 Go / GB | B |
-| 14.1 à 14.3 (cluster Proxmox VE) | 2 | 12 Go / GB | C (ou / or 2 × 6 Go / GB, limite / tight) |
+| 14.1 à 14.3 (cluster Proxmox VE : 2 nœuds, 1 QDevice, 1 stockage NFS / 2 nodes, 1 QDevice, 1 NFS storage) | 4 | 14 Go / GB (à valider / to validate) | C |
 | 15.1 à 15.3 (ESXi) | 1 ESXi + 1 stockage / storage | 9 Go / GB | B |
-| 16.1 à 16.3 (vCenter) | 1 vCenter + 2 ESXi | à confirmer / to be confirmed | C |
+| 16.1 à 16.3 (vCenter) | 1 vCenter + 1 ou 2 ESXi / 1 or 2 ESXi | à valider / to validate (vCenter ≈ 14 Go / GB + ESXi) | C (à valider / to validate) |
 | 18.1 à 19.3 (DevStack) | 1 | 12 Go / GB | C |
 | 20.1, 21.1, 22.1 à 22.2 (IaC, LocalStack, supervision) | 1 à 2 | 4 Go / GB | A |
 
 !!! warning "À tester avant la séance / To test before the session"
-    La mémoire de la plus petite taille de vCenter (environ 14 Go d'après la documentation de l'éditeur) et la faisabilité d'un cluster Proxmox VE avec deux VM de 6 Go sur un poste de 16 Go sont à valider sur le matériel réel. / The memory of the smallest vCenter size (about 14 GB according to the vendor documentation) and the feasibility of a two-VM Proxmox VE cluster at 6 GB each on a 16 GB computer must be validated on real hardware.
+    - **Cluster Proxmox VE (chapitre 14).** Un cluster à deux nœuds perd le quorum à la panne d'un nœud, ce qui rend le lab 14.3 (haute disponibilité) impossible. Le lab utilise donc deux nœuds, un **QDevice** léger (troisième vote, environ 1 Go) et une VM NFS pour le stockage partagé (migration à chaud, lab 14.2). Le budget d'environ 14 Go est une estimation : ce chapitre est réservé au profil C. / A two-node cluster loses quorum when one node fails, which makes lab 14.3 (high availability) impossible. The lab therefore uses two nodes, a light **QDevice** (third vote, about 1 GB) and an NFS VM for shared storage (live migration, lab 14.2). The budget of about 14 GB is an estimate: this chapter is reserved for profile C.
+    - **vCenter (chapitre 16).** La plus petite taille de vCenter demande environ 14 Go d'après la documentation de l'éditeur. Avec deux ESXi de 8 Go, le total dépasse les 32 Go d'un poste de profil C. Options à valider sur le matériel réel : un seul ESXi de 8 Go, deux ESXi de 4 Go (limite), ou démonstration enseignante. / The smallest vCenter size needs about 14 GB according to the vendor documentation. With two 8 GB ESXi hosts, the total exceeds the 32 GB of a profile C computer. Options to validate on real hardware: a single 8 GB ESXi, two 4 GB ESXi hosts (tight), or an instructor demonstration.
+    - **MinIO et LocalStack (labs 11.1 et 21.1).** Les conditions d'accès des éditions gratuites (compte, jeton, distribution) évoluent : à vérifier avant la séance, car elles touchent le principe « aucun compte requis ». / The access terms of the free editions (account, token, distribution) change: check before the session, as they affect the "no account required" principle.
 
 ## 2. Poste hôte / Host computer
 
@@ -93,7 +95,7 @@
 
     ### Un seul hyperviseur actif à la fois
 
-    Hyper-V, la Plateforme de l'hyperviseur Windows, la Plateforme de machine virtuelle, WSL 2 et l'intégrité de la mémoire (isolation du noyau) activent l'hyperviseur de Windows. VMware Workstation et VirtualBox peuvent alors fonctionner par-dessus, avec des performances réduites et, selon les cas, sans virtualisation imbriquée. **Pour les labs de la Partie 3 (Proxmox VE, ESXi, KVM), travaillez avec l'hyperviseur de Windows désactivé.**
+    Hyper-V, la Plateforme de l'hyperviseur Windows, la Plateforme de machine virtuelle, WSL 2 et l'intégrité de la mémoire (isolation du noyau) activent l'hyperviseur de Windows. VMware Workstation et VirtualBox peuvent alors fonctionner par-dessus, avec des performances réduites et, selon les cas, sans virtualisation imbriquée. **Pour les labs des Parties 3 et 4 (Proxmox VE, ESXi, KVM, DevStack), travaillez avec l'hyperviseur de Windows désactivé.**
 
     Pour basculer, ouvrez PowerShell **en administrateur**, puis redémarrez :
 
@@ -123,7 +125,7 @@
 
     ### Only one active hypervisor at a time
 
-    Hyper-V, the Windows Hypervisor Platform, the Virtual Machine Platform, WSL 2 and memory integrity (core isolation) start the Windows hypervisor. VMware Workstation and VirtualBox can then run on top of it, with reduced performance and, in some cases, without nested virtualization. **For the Part 3 labs (Proxmox VE, ESXi, KVM), work with the Windows hypervisor turned off.**
+    Hyper-V, the Windows Hypervisor Platform, the Virtual Machine Platform, WSL 2 and memory integrity (core isolation) start the Windows hypervisor. VMware Workstation and VirtualBox can then run on top of it, with reduced performance and, in some cases, without nested virtualization. **For the Part 3 and Part 4 labs (Proxmox VE, ESXi, KVM, DevStack), work with the Windows hypervisor turned off.**
 
     To switch, open PowerShell **as administrator**, then reboot:
 
@@ -247,7 +249,7 @@ flowchart LR
     df -h /                                   # espace disque
     lscpu | grep -i virtualization            # extension VT-x ou AMD-V visible
     egrep -c '(vmx|svm)' /proc/cpuinfo        # doit afficher un nombre supérieur à 0
-    sudo apt install -y cpu-checker && kvm-ok # KVM utilisable (labs de la Partie 3)
+    sudo apt install -y cpu-checker && kvm-ok # KVM utilisable (labs des Parties 3 et 4)
     ping -c 2 8.8.8.8                         # accès réseau
     curl -sI https://archive.ubuntu.com | head -1   # accès aux dépôts
     ```
@@ -276,7 +278,7 @@ flowchart LR
     df -h /                                   # disk space
     lscpu | grep -i virtualization            # VT-x or AMD-V extension visible
     egrep -c '(vmx|svm)' /proc/cpuinfo        # must print a number greater than 0
-    sudo apt install -y cpu-checker && kvm-ok # KVM usable (Part 3 labs)
+    sudo apt install -y cpu-checker && kvm-ok # KVM usable (Part 3 and 4 labs)
     ping -c 2 8.8.8.8                         # network access
     curl -sI https://archive.ubuntu.com | head -1   # repository access
     ```
@@ -309,6 +311,7 @@ flowchart LR
     - **Proxmox VE** : une fenêtre signale l'absence d'abonnement à chaque connexion. Elle n'empêche pas d'utiliser la plateforme pour les labs.
     - **Vagrant** : distribué sous licence BSL ; l'usage pédagogique ne pose pas de difficulté, mais ce n'est pas une licence open source classique.
     - **Cloud public** : le cours n'exige aucun compte. Les offres gratuites et les crédits d'essai des fournisseurs changent souvent et demandent généralement une carte bancaire : seules des démonstrations et des simulations locales sont prévues.
+    - **MinIO et LocalStack** : les conditions d'accès des éditions gratuites (compte, jeton, mode de distribution) peuvent changer. Vérifiez-les avant les labs 11.1 et 21.1 ; si un compte devenait obligatoire, une alternative sans compte sera indiquée dans le lab.
     - **Secrets** : jetons, mots de passe et clés de TP ne sont jamais publiés dans un dépôt public.
 
 === "English"
@@ -318,6 +321,7 @@ flowchart LR
     - **Proxmox VE**: a dialog reports the missing subscription at each login. It does not prevent you from using the platform for labs.
     - **Vagrant**: distributed under the BSL license; educational use is not a problem, but it is not a classic open-source license.
     - **Public cloud**: the course requires no account. Providers' free tiers and trial credits change often and usually require a credit card: only demonstrations and local simulations are planned.
+    - **MinIO and LocalStack**: the access terms of the free editions (account, token, distribution method) may change. Check them before labs 11.1 and 21.1; if an account became mandatory, an account-free alternative will be given in the lab.
     - **Secrets**: tokens, passwords and lab keys are never published in a public repository.
 
 ## 9. Si les ressources manquent / If resources are missing
@@ -326,7 +330,7 @@ flowchart LR
 
     | Situation | Solution prévue |
     |---|---|
-    | Poste de 16 Go pour un lab de profil C | Travail en binôme sur une machine de 32 Go, ou démonstration enseignante |
+    | Poste de 16 Go pour un lab de profil C (cluster Proxmox VE, vCenter, Ceph, DevStack) | Travail en binôme sur une machine de 32 Go, ou démonstration enseignante |
     | Édition Famille de Windows (chapitre 4) | Démonstration ou poste de salle compatible Hyper-V |
     | Pas d'accès à l'éditeur pour ESXi ou vCenter | Installateurs fournis par l'enseignant pendant la séance |
     | Disque insuffisant | Disques virtuels à allocation dynamique, suppression des machines du chapitre précédent après sauvegarde de vos fichiers |
@@ -335,7 +339,7 @@ flowchart LR
 
     | Situation | Planned solution |
     |---|---|
-    | 16 GB computer for a profile C lab | Pair work on a 32 GB machine, or instructor demonstration |
+    | 16 GB computer for a profile C lab (Proxmox VE cluster, vCenter, Ceph, DevStack) | Pair work on a 32 GB machine, or instructor demonstration |
     | Windows Home edition (chapter 4) | Demonstration or a classroom machine that supports Hyper-V |
     | No access to the vendor site for ESXi or vCenter | Installers provided by the instructor during the session |
     | Insufficient disk space | Thin-provisioned virtual disks, delete the previous chapter's machines after saving your files |

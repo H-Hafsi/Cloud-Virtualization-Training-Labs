@@ -1,7 +1,7 @@
 # Quiz du chapitre 5 : Connexion entre VM et réseaux virtuels
 
 !!! warning "Under construction"
-    Ce quiz est en cours de rédaction.
+Ce quiz est en cours de rédaction.
 
 ## Contenu prévu
 

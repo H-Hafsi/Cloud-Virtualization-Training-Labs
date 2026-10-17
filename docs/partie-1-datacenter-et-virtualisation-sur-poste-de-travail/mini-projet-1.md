@@ -193,14 +193,14 @@ end
 === "Français"
 
     - **But :** `routeur` transmet les paquets entre les deux réseaux et assure le NAT vers Internet.
-    - **Indices :** reprenez les notions du [Lab 5.3](../ch05-connexion-entre-vm-et-reseaux-virtuels/lab-5-3-routage-nat-et-vlan-sous-linux.md) : transfert IP permanent (`sysctl`), règle `masquerade` sur la **carte de sortie** (la carte NAT de Vagrant : repérez-la par `ip route show default`), et rendez la configuration **permanente** ou rejouable. Le script `provision/routeur.sh` doit pouvoir être rejoué sans erreur.
+    - **Indices :** reprenez les notions du [Lab 5.3](ch05-connexion-entre-vm-et-reseaux-virtuels/lab-5-3-routage-nat-et-vlan-sous-linux.md) : transfert IP permanent (`sysctl`), règle `masquerade` sur la **carte de sortie** (la carte NAT de Vagrant : repérez-la par `ip route show default`), et rendez la configuration **permanente** ou rejouable. Le script `provision/routeur.sh` doit pouvoir être rejoué sans erreur.
     - **Point de contrôle :** `sysctl net.ipv4.ip_forward` vaut 1 sur `routeur`, y compris après `vagrant reload routeur` ; `nft list ruleset` montre la règle de NAT.
     - **Question de réflexion :** que se passerait-il si la règle `masquerade` était posée sur la mauvaise carte ?
 
 === "English"
 
     - **Goal:** `routeur` forwards packets between the two networks and performs NAT to the Internet.
-    - **Hints:** reuse the notions from [Lab 5.3](../ch05-connexion-entre-vm-et-reseaux-virtuels/lab-5-3-routage-nat-et-vlan-sous-linux.md): permanent IP forwarding (`sysctl`), a `masquerade` rule on the **outgoing card** (Vagrant's NAT card: find it with `ip route show default`), and make the configuration **permanent** or replayable. The `provision/routeur.sh` script must be replayable without errors.
+    - **Hints:** reuse the notions from [Lab 5.3](ch05-connexion-entre-vm-et-reseaux-virtuels/lab-5-3-routage-nat-et-vlan-sous-linux.md): permanent IP forwarding (`sysctl`), a `masquerade` rule on the **outgoing card** (Vagrant's NAT card: find it with `ip route show default`), and make the configuration **permanent** or replayable. The `provision/routeur.sh` script must be replayable without errors.
     - **Checkpoint:** `sysctl net.ipv4.ip_forward` is 1 on `routeur`, including after `vagrant reload routeur`; `nft list ruleset` shows the NAT rule.
     - **Reflection question:** what would happen if the `masquerade` rule were set on the wrong card?
 
@@ -209,14 +209,14 @@ end
 === "Français"
 
     - **But :** `app` sert la page, `web` la relaie, et les deux passent par le routeur.
-    - **Indices :** réutilisez les scripts du [Lab 6.2](../ch06-vagrant-decrire-ses-environnements/lab-6-2-environnement-multi-machines-avec-provisioning.md), en passant l'adresse de `app` en argument à `web`. Sur `web` et `app`, ajoutez une **route par défaut** via l'adresse du routeur sur leur réseau, avec une **métrique plus basse** que celle de la carte NAT de Vagrant, et rendez-la persistante (par exemple avec un fichier Netplan, comme au Lab 5.3).
+    - **Indices :** réutilisez les scripts du [Lab 6.2](ch06-vagrant-decrire-ses-environnements/lab-6-2-environnement-multi-machines-avec-provisioning.md), en passant l'adresse de `app` en argument à `web`. Sur `web` et `app`, ajoutez une **route par défaut** via l'adresse du routeur sur leur réseau, avec une **métrique plus basse** que celle de la carte NAT de Vagrant, et rendez-la persistante (par exemple avec un fichier Netplan, comme au Lab 5.3).
     - **Point de contrôle :** `curl.exe http://127.0.0.1:8080` renvoie la page de `app` ; `vagrant ssh web -c "ip route"` montre la route par défaut via le routeur.
     - **Question de réflexion :** pourquoi `web` ne peut-il pas joindre `app` directement, sans passer par le routeur ?
 
 === "English"
 
     - **Goal:** `app` serves the page, `web` relays it, and both go through the router.
-    - **Hints:** reuse the scripts from [Lab 6.2](../ch06-vagrant-decrire-ses-environnements/lab-6-2-environnement-multi-machines-avec-provisioning.md), passing `app`'s address as an argument to `web`. On `web` and `app`, add a **default route** via the router's address on their network, with a **lower metric** than Vagrant's NAT card, and make it persistent (for example with a Netplan file, as in Lab 5.3).
+    - **Hints:** reuse the scripts from [Lab 6.2](ch06-vagrant-decrire-ses-environnements/lab-6-2-environnement-multi-machines-avec-provisioning.md), passing `app`'s address as an argument to `web`. On `web` and `app`, add a **default route** via the router's address on their network, with a **lower metric** than Vagrant's NAT card, and make it persistent (for example with a Netplan file, as in Lab 5.3).
     - **Checkpoint:** `curl.exe http://127.0.0.1:8080` returns `app`'s page; `vagrant ssh web -c "ip route"` shows the default route via the router.
     - **Reflection question:** why can `web` not reach `app` directly, without going through the router?
 
@@ -313,7 +313,7 @@ end
     | `curl.exe` sur le port 8080 ne répond pas | `web` non provisionnée ; port déjà utilisé sur l'hôte ; `nginx -t` en erreur |
     | `vagrant up` échoue sur le réseau privé | Adresse hors de la plage autorisée ou en conflit avec un autre réseau de l'hôte |
     | Scripts qui échouent à la reconstruction | Script non rejouable (fichier ou règle déjà existant) ; fins de ligne Windows ; dépendance à une action manuelle |
-    | VM qui ne démarrent pas | Virtualisation désactivée ou hyperviseur Windows actif (voir le [Lab 2.1](../ch02-principes-de-la-virtualisation/lab-2-1-preparer-le-poste-pour-la-virtualisation.md)) |
+    | VM qui ne démarrent pas | Virtualisation désactivée ou hyperviseur Windows actif (voir le [Lab 2.1](ch02-principes-de-la-virtualisation/lab-2-1-preparer-le-poste-pour-la-virtualisation.md)) |
 
 === "English"
 
@@ -326,7 +326,7 @@ end
     | `curl.exe` on port 8080 gets no answer | `web` not provisioned; port already in use on the host; `nginx -t` in error |
     | `vagrant up` fails on the private network | Address outside the allowed range or conflicting with another host network |
     | Scripts fail on rebuild | Script not replayable (file or rule already exists); Windows line endings; dependence on a manual action |
-    | VMs do not start | Virtualization disabled or Windows hypervisor active (see [Lab 2.1](../ch02-principes-de-la-virtualisation/lab-2-1-preparer-le-poste-pour-la-virtualisation.md)) |
+    | VMs do not start | Virtualization disabled or Windows hypervisor active (see [Lab 2.1](ch02-principes-de-la-virtualisation/lab-2-1-preparer-le-poste-pour-la-virtualisation.md)) |
 
 ## 10. Pour aller plus loin (facultatif) / Going further (optional)
 
